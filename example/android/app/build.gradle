@@ -42,3 +42,6 @@ android {
 flutter {
     source = "../.."
 }
+dependencies {
+    implementation project(':moniepoint_checkout_sdk')
+}
