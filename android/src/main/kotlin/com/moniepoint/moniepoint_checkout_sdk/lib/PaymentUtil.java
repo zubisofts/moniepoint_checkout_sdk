@@ -47,7 +47,7 @@ public class PaymentUtil {
         Request paymentRequest = new Request.Builder()
                 .url("https://api.sandbox.checkout.com/payments")
 
-                .addHeader("Authorization", "Bearer " + "SecretKey")
+                .addHeader("Authorization", "Bearer " + "Add key here")
                 .post(requestBody)
                 .build();
 
@@ -111,7 +111,7 @@ public class PaymentUtil {
                 "    \"amount\": " + "100" + ",\n" +
                 "    \"currency\": \"GBP\",\n" +
                 "    \"reference\": \"ORD-5023-4E89\",\n" +
-                "    \"processing_channel_id\": \"pc_mvcoe5akpatufhgaq7sofug4qu\",\n" +
+                "    \"processing_channel_id\": \"channelId\",\n" +
                 "    \"success_url\": \"" + "https://example.com/payments/success" + "\",\n" +
                 "    \"failure_url\": \"" + "https://example.com/payments/success" + "\",\n" +
                 "    \"3ds\": {\n" +
