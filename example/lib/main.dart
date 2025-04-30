@@ -25,11 +25,13 @@ class _MyAppState extends State<MyApp> {
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
+  Future<void> getPaymentToken() async {
     try {
       final checkout = MoniepointCheckout();
       await checkout.initialize(
-          publicKey: 'pk_sbox_pmfui27bywspolwlmqej5b6gvmr');
+        publicKey: 'pk_sbox_pmfui27bywspolwlmqej5b6gvmr',
+        environment: CheckoutEnvironment.sandbox
+      );
       final token = await checkout.tokenize();
       setState(() {
         _token = token;
@@ -52,20 +54,24 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text('Running on: $_token\n'),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  initPlatformState();
-                },
-                child: Text("Launch Payment"),
-              ),
-            ],
-          ),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('Payment Token: ', style: TextStyle(fontWeight: FontWeight.w500),),
+                Text(_token, style: const TextStyle(fontWeight: FontWeight.w800),),
+              ],
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                getPaymentToken();
+              },
+              child: const Text("Get Payment Token"),
+            ),
+          ],
         ),
       ),
     );
