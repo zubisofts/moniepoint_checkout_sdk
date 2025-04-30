@@ -3,17 +3,14 @@ import UIKit
 
 public class MoniepointCheckoutSdkPlugin: NSObject, FlutterPlugin {
   public static func register(with registrar: FlutterPluginRegistrar) {
-    let channel = FlutterMethodChannel(name: "moniepoint_checkout_sdk", binaryMessenger: registrar.messenger())
-    let instance = MoniepointCheckoutSdkPlugin()
-    registrar.addMethodCallDelegate(instance, channel: channel)
-  }
-
-  public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-    switch call.method {
-    case "getPlatformVersion":
-      result("iOS " + UIDevice.current.systemVersion)
-    default:
-      result(FlutterMethodNotImplemented)
-    }
+      let messenger = registrar.messenger()
+      
+      guard let controller = UIApplication.shared.delegate?.window??.rootViewController else {
+            print("Failed to get rootViewController")
+            return
+          }
+      
+      let instance = MoniepointCheckoutHandler(controller: controller)
+      MoniepointCheckoutSetup.setUp(binaryMessenger: messenger, api: instance)
   }
 }
