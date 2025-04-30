@@ -47,7 +47,7 @@ public class PaymentUtil {
         Request paymentRequest = new Request.Builder()
                 .url("https://api.sandbox.checkout.com/payments")
 
-                .addHeader("Authorization", "Bearer " + "Add key here")
+                .addHeader("Authorization", "Bearer " + "Add key here ")
                 .post(requestBody)
                 .build();
 
