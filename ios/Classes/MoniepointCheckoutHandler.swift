@@ -25,7 +25,7 @@ class MoniepointCheckoutHandler: NSObject, MoniepointCheckout {
         let config = PaymentFormConfiguration(
             apiKey: publicKey,
             environment: environment,
-            supportedSchemes: [.visa, .mastercard, .discover],
+            supportedSchemes: [.visa, .mastercard],
             billingFormData: nil
         )
 
