@@ -55,6 +55,10 @@ private func wrapError(_ error: Any) -> [Any?] {
   ]
 }
 
+private func createConnectionError(withChannelName channelName: String) -> PigeonError {
+  return PigeonError(code: "channel-error", message: "Unable to establish connection on channel: '\(channelName)'.", details: "")
+}
+
 private func isNullish(_ value: Any?) -> Bool {
   return value is NSNull || value == nil
 }
@@ -64,10 +68,294 @@ private func nilOrValue<T>(_ value: Any?) -> T? {
   return value as! T?
 }
 
+func deepEqualsMoniepointCheckout(_ lhs: Any?, _ rhs: Any?) -> Bool {
+  let cleanLhs = nilOrValue(lhs) as Any?
+  let cleanRhs = nilOrValue(rhs) as Any?
+  switch (cleanLhs, cleanRhs) {
+  case (nil, nil):
+    return true
+
+  case (nil, _), (_, nil):
+    return false
+
+  case is (Void, Void):
+    return true
+
+  case let (cleanLhsHashable, cleanRhsHashable) as (AnyHashable, AnyHashable):
+    return cleanLhsHashable == cleanRhsHashable
+
+  case let (cleanLhsArray, cleanRhsArray) as ([Any?], [Any?]):
+    guard cleanLhsArray.count == cleanRhsArray.count else { return false }
+    for (index, element) in cleanLhsArray.enumerated() {
+      if !deepEqualsMoniepointCheckout(element, cleanRhsArray[index]) {
+        return false
+      }
+    }
+    return true
+
+  case let (cleanLhsDictionary, cleanRhsDictionary) as ([AnyHashable: Any?], [AnyHashable: Any?]):
+    guard cleanLhsDictionary.count == cleanRhsDictionary.count else { return false }
+    for (key, cleanLhsValue) in cleanLhsDictionary {
+      guard cleanRhsDictionary.index(forKey: key) != nil else { return false }
+      if !deepEqualsMoniepointCheckout(cleanLhsValue, cleanRhsDictionary[key]!) {
+        return false
+      }
+    }
+    return true
+
+  default:
+    // Any other type shouldn't be able to be used with pigeon. File an issue if you find this to be untrue.
+    return false
+  }
+}
+
+func deepHashMoniepointCheckout(value: Any?, hasher: inout Hasher) {
+  if let valueList = value as? [AnyHashable] {
+     for item in valueList { deepHashMoniepointCheckout(value: item, hasher: &hasher) }
+     return
+  }
+
+  if let valueDict = value as? [AnyHashable: AnyHashable] {
+    for key in valueDict.keys { 
+      hasher.combine(key)
+      deepHashMoniepointCheckout(value: valueDict[key]!, hasher: &hasher)
+    }
+    return
+  }
+
+  if let hashableValue = value as? AnyHashable {
+    hasher.combine(hashableValue.hashValue)
+  }
+
+  return hasher.combine(String(describing: value))
+}
+
+    
 
 enum CheckoutEnvironment: Int {
   case sandbox = 0
   case production = 1
+}
+
+/// Generated class from Pigeon that represents data sent in messages.
+struct CkoDesignToken: Hashable {
+  var colorTokens: CkoColorTokens? = nil
+  var borderRadius: CkoBorderRadiusToken? = nil
+  var borderFormRadius: CkoBorderRadiusToken? = nil
+  var fonts: [String?: CkoFont]? = nil
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> CkoDesignToken? {
+    let colorTokens: CkoColorTokens? = nilOrValue(pigeonVar_list[0])
+    let borderRadius: CkoBorderRadiusToken? = nilOrValue(pigeonVar_list[1])
+    let borderFormRadius: CkoBorderRadiusToken? = nilOrValue(pigeonVar_list[2])
+    let fonts: [String?: CkoFont]? = nilOrValue(pigeonVar_list[3])
+
+    return CkoDesignToken(
+      colorTokens: colorTokens,
+      borderRadius: borderRadius,
+      borderFormRadius: borderFormRadius,
+      fonts: fonts
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      colorTokens,
+      borderRadius,
+      borderFormRadius,
+      fonts,
+    ]
+  }
+  static func == (lhs: CkoDesignToken, rhs: CkoDesignToken) -> Bool {
+    return deepEqualsMoniepointCheckout(lhs.toList(), rhs.toList())  }
+  func hash(into hasher: inout Hasher) {
+    deepHashMoniepointCheckout(value: toList(), hasher: &hasher)
+  }
+}
+
+/// Generated class from Pigeon that represents data sent in messages.
+struct CkoColorTokens: Hashable {
+  var colorAction: Int64? = nil
+  var colorBackground: Int64? = nil
+  var colorBorder: Int64? = nil
+  var colorDisabled: Int64? = nil
+  var colorPrimary: Int64? = nil
+  var colorFormBackground: Int64? = nil
+  var colorFormBorder: Int64? = nil
+  var colorInverse: Int64? = nil
+  var colorOutline: Int64? = nil
+  var colorSecondary: Int64? = nil
+  var colorSuccess: Int64? = nil
+  var colorError: Int64? = nil
+  var colorScrolledContainer: Int64? = nil
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> CkoColorTokens? {
+    let colorAction: Int64? = nilOrValue(pigeonVar_list[0])
+    let colorBackground: Int64? = nilOrValue(pigeonVar_list[1])
+    let colorBorder: Int64? = nilOrValue(pigeonVar_list[2])
+    let colorDisabled: Int64? = nilOrValue(pigeonVar_list[3])
+    let colorPrimary: Int64? = nilOrValue(pigeonVar_list[4])
+    let colorFormBackground: Int64? = nilOrValue(pigeonVar_list[5])
+    let colorFormBorder: Int64? = nilOrValue(pigeonVar_list[6])
+    let colorInverse: Int64? = nilOrValue(pigeonVar_list[7])
+    let colorOutline: Int64? = nilOrValue(pigeonVar_list[8])
+    let colorSecondary: Int64? = nilOrValue(pigeonVar_list[9])
+    let colorSuccess: Int64? = nilOrValue(pigeonVar_list[10])
+    let colorError: Int64? = nilOrValue(pigeonVar_list[11])
+    let colorScrolledContainer: Int64? = nilOrValue(pigeonVar_list[12])
+
+    return CkoColorTokens(
+      colorAction: colorAction,
+      colorBackground: colorBackground,
+      colorBorder: colorBorder,
+      colorDisabled: colorDisabled,
+      colorPrimary: colorPrimary,
+      colorFormBackground: colorFormBackground,
+      colorFormBorder: colorFormBorder,
+      colorInverse: colorInverse,
+      colorOutline: colorOutline,
+      colorSecondary: colorSecondary,
+      colorSuccess: colorSuccess,
+      colorError: colorError,
+      colorScrolledContainer: colorScrolledContainer
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      colorAction,
+      colorBackground,
+      colorBorder,
+      colorDisabled,
+      colorPrimary,
+      colorFormBackground,
+      colorFormBorder,
+      colorInverse,
+      colorOutline,
+      colorSecondary,
+      colorSuccess,
+      colorError,
+      colorScrolledContainer,
+    ]
+  }
+  static func == (lhs: CkoColorTokens, rhs: CkoColorTokens) -> Bool {
+    return deepEqualsMoniepointCheckout(lhs.toList(), rhs.toList())  }
+  func hash(into hasher: inout Hasher) {
+    deepHashMoniepointCheckout(value: toList(), hasher: &hasher)
+  }
+}
+
+/// Generated class from Pigeon that represents data sent in messages.
+struct CkoBorderRadiusToken: Hashable {
+  var all: Int64? = nil
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> CkoBorderRadiusToken? {
+    let all: Int64? = nilOrValue(pigeonVar_list[0])
+
+    return CkoBorderRadiusToken(
+      all: all
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      all
+    ]
+  }
+  static func == (lhs: CkoBorderRadiusToken, rhs: CkoBorderRadiusToken) -> Bool {
+    return deepEqualsMoniepointCheckout(lhs.toList(), rhs.toList())  }
+  func hash(into hasher: inout Hasher) {
+    deepHashMoniepointCheckout(value: toList(), hasher: &hasher)
+  }
+}
+
+/// Generated class from Pigeon that represents data sent in messages.
+struct CkoFont: Hashable {
+  var fontStyle: String? = nil
+  var fontWeight: String? = nil
+  var fontFamily: String? = nil
+  var letterSpacing: Int64? = nil
+  var lineHeight: Int64? = nil
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> CkoFont? {
+    let fontStyle: String? = nilOrValue(pigeonVar_list[0])
+    let fontWeight: String? = nilOrValue(pigeonVar_list[1])
+    let fontFamily: String? = nilOrValue(pigeonVar_list[2])
+    let letterSpacing: Int64? = nilOrValue(pigeonVar_list[3])
+    let lineHeight: Int64? = nilOrValue(pigeonVar_list[4])
+
+    return CkoFont(
+      fontStyle: fontStyle,
+      fontWeight: fontWeight,
+      fontFamily: fontFamily,
+      letterSpacing: letterSpacing,
+      lineHeight: lineHeight
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      fontStyle,
+      fontWeight,
+      fontFamily,
+      letterSpacing,
+      lineHeight,
+    ]
+  }
+  static func == (lhs: CkoFont, rhs: CkoFont) -> Bool {
+    return deepEqualsMoniepointCheckout(lhs.toList(), rhs.toList())  }
+  func hash(into hasher: inout Hasher) {
+    deepHashMoniepointCheckout(value: toList(), hasher: &hasher)
+  }
+}
+
+/// Generated class from Pigeon that represents data sent in messages.
+struct CheckoutInitParams: Hashable {
+  var sessionToken: String
+  var sessionId: String
+  var sessionSecret: String
+  var publicKey: String
+  var environment: CheckoutEnvironment? = nil
+  var designToken: CkoDesignToken? = nil
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> CheckoutInitParams? {
+    let sessionToken = pigeonVar_list[0] as! String
+    let sessionId = pigeonVar_list[1] as! String
+    let sessionSecret = pigeonVar_list[2] as! String
+    let publicKey = pigeonVar_list[3] as! String
+    let environment: CheckoutEnvironment? = nilOrValue(pigeonVar_list[4])
+    let designToken: CkoDesignToken? = nilOrValue(pigeonVar_list[5])
+
+    return CheckoutInitParams(
+      sessionToken: sessionToken,
+      sessionId: sessionId,
+      sessionSecret: sessionSecret,
+      publicKey: publicKey,
+      environment: environment,
+      designToken: designToken
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      sessionToken,
+      sessionId,
+      sessionSecret,
+      publicKey,
+      environment,
+      designToken,
+    ]
+  }
+  static func == (lhs: CheckoutInitParams, rhs: CheckoutInitParams) -> Bool {
+    return deepEqualsMoniepointCheckout(lhs.toList(), rhs.toList())  }
+  func hash(into hasher: inout Hasher) {
+    deepHashMoniepointCheckout(value: toList(), hasher: &hasher)
+  }
 }
 
 private class MoniepointCheckoutPigeonCodecReader: FlutterStandardReader {
@@ -79,6 +367,16 @@ private class MoniepointCheckoutPigeonCodecReader: FlutterStandardReader {
         return CheckoutEnvironment(rawValue: enumResultAsInt)
       }
       return nil
+    case 130:
+      return CkoDesignToken.fromList(self.readValue() as! [Any?])
+    case 131:
+      return CkoColorTokens.fromList(self.readValue() as! [Any?])
+    case 132:
+      return CkoBorderRadiusToken.fromList(self.readValue() as! [Any?])
+    case 133:
+      return CkoFont.fromList(self.readValue() as! [Any?])
+    case 134:
+      return CheckoutInitParams.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
     }
@@ -90,6 +388,21 @@ private class MoniepointCheckoutPigeonCodecWriter: FlutterStandardWriter {
     if let value = value as? CheckoutEnvironment {
       super.writeByte(129)
       super.writeValue(value.rawValue)
+    } else if let value = value as? CkoDesignToken {
+      super.writeByte(130)
+      super.writeValue(value.toList())
+    } else if let value = value as? CkoColorTokens {
+      super.writeByte(131)
+      super.writeValue(value.toList())
+    } else if let value = value as? CkoBorderRadiusToken {
+      super.writeByte(132)
+      super.writeValue(value.toList())
+    } else if let value = value as? CkoFont {
+      super.writeByte(133)
+      super.writeValue(value.toList())
+    } else if let value = value as? CheckoutInitParams {
+      super.writeByte(134)
+      super.writeValue(value.toList())
     } else {
       super.writeValue(value)
     }
@@ -110,49 +423,89 @@ class MoniepointCheckoutPigeonCodec: FlutterStandardMessageCodec, @unchecked Sen
   static let shared = MoniepointCheckoutPigeonCodec(readerWriter: MoniepointCheckoutPigeonCodecReaderWriter())
 }
 
-
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
-protocol MoniepointCheckout {
-  func initialize(publicKey: String, environment: CheckoutEnvironment) throws
-  func tokenize(completion: @escaping (Result<String, Error>) -> Void)
+protocol MoniepointCheckoutPlugin {
+  /// This is called by Flutter to start the checkout flow.
+  func startCheckout(session: CheckoutInitParams) throws
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
-class MoniepointCheckoutSetup {
+class MoniepointCheckoutPluginSetup {
   static var codec: FlutterStandardMessageCodec { MoniepointCheckoutPigeonCodec.shared }
-  /// Sets up an instance of `MoniepointCheckout` to handle messages through the `binaryMessenger`.
-  static func setUp(binaryMessenger: FlutterBinaryMessenger, api: MoniepointCheckout?, messageChannelSuffix: String = "") {
+  /// Sets up an instance of `MoniepointCheckoutPlugin` to handle messages through the `binaryMessenger`.
+  static func setUp(binaryMessenger: FlutterBinaryMessenger, api: MoniepointCheckoutPlugin?, messageChannelSuffix: String = "") {
     let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
-    let initializeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.moniepoint_checkout.MoniepointCheckout.initialize\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    /// This is called by Flutter to start the checkout flow.
+    let startCheckoutChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.moniepoint_checkout.MoniepointCheckoutPlugin.startCheckout\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
-      initializeChannel.setMessageHandler { message, reply in
+      startCheckoutChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let publicKeyArg = args[0] as! String
-        let environmentArg = args[1] as! CheckoutEnvironment
+        let sessionArg = args[0] as! CheckoutInitParams
         do {
-          try api.initialize(publicKey: publicKeyArg, environment: environmentArg)
+          try api.startCheckout(session: sessionArg)
           reply(wrapResult(nil))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      initializeChannel.setMessageHandler(nil)
+      startCheckoutChannel.setMessageHandler(nil)
     }
-    let tokenizeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.moniepoint_checkout.MoniepointCheckout.tokenize\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      tokenizeChannel.setMessageHandler { _, reply in
-        api.tokenize { result in
-          switch result {
-          case .success(let res):
-            reply(wrapResult(res))
-          case .failure(let error):
-            reply(wrapError(error))
-          }
-        }
+  }
+}
+/// Generated protocol from Pigeon that represents Flutter messages that can be called from Swift.
+protocol CheckoutPlatformApiProtocol {
+  /// Called when checkout succeeds. Returns a string (e.g. token or result ID).
+  func onSuccess(result resultArg: String, completion: @escaping (Result<Void, PigeonError>) -> Void)
+  /// Called when checkout fails. Includes the error message.
+  func onFailure(error errorArg: String, completion: @escaping (Result<Void, PigeonError>) -> Void)
+}
+class CheckoutPlatformApi: CheckoutPlatformApiProtocol {
+  private let binaryMessenger: FlutterBinaryMessenger
+  private let messageChannelSuffix: String
+  init(binaryMessenger: FlutterBinaryMessenger, messageChannelSuffix: String = "") {
+    self.binaryMessenger = binaryMessenger
+    self.messageChannelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
+  }
+  var codec: MoniepointCheckoutPigeonCodec {
+    return MoniepointCheckoutPigeonCodec.shared
+  }
+  /// Called when checkout succeeds. Returns a string (e.g. token or result ID).
+  func onSuccess(result resultArg: String, completion: @escaping (Result<Void, PigeonError>) -> Void) {
+    let channelName: String = "dev.flutter.pigeon.moniepoint_checkout.CheckoutPlatformApi.onSuccess\(messageChannelSuffix)"
+    let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
+    channel.sendMessage([resultArg] as [Any?]) { response in
+      guard let listResponse = response as? [Any?] else {
+        completion(.failure(createConnectionError(withChannelName: channelName)))
+        return
       }
-    } else {
-      tokenizeChannel.setMessageHandler(nil)
+      if listResponse.count > 1 {
+        let code: String = listResponse[0] as! String
+        let message: String? = nilOrValue(listResponse[1])
+        let details: String? = nilOrValue(listResponse[2])
+        completion(.failure(PigeonError(code: code, message: message, details: details)))
+      } else {
+        completion(.success(()))
+      }
+    }
+  }
+  /// Called when checkout fails. Includes the error message.
+  func onFailure(error errorArg: String, completion: @escaping (Result<Void, PigeonError>) -> Void) {
+    let channelName: String = "dev.flutter.pigeon.moniepoint_checkout.CheckoutPlatformApi.onFailure\(messageChannelSuffix)"
+    let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
+    channel.sendMessage([errorArg] as [Any?]) { response in
+      guard let listResponse = response as? [Any?] else {
+        completion(.failure(createConnectionError(withChannelName: channelName)))
+        return
+      }
+      if listResponse.count > 1 {
+        let code: String = listResponse[0] as! String
+        let message: String? = nilOrValue(listResponse[1])
+        let details: String? = nilOrValue(listResponse[2])
+        completion(.failure(PigeonError(code: code, message: message, details: details)))
+      } else {
+        completion(.success(()))
+      }
     }
   }
 }

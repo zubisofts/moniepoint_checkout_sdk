@@ -15,9 +15,358 @@ PlatformException _createConnectionError(String channelName) {
   );
 }
 
+List<Object?> wrapResponse({Object? result, PlatformException? error, bool empty = false}) {
+  if (empty) {
+    return <Object?>[];
+  }
+  if (error == null) {
+    return <Object?>[result];
+  }
+  return <Object?>[error.code, error.message, error.details];
+}
+bool _deepEquals(Object? a, Object? b) {
+  if (a is List && b is List) {
+    return a.length == b.length &&
+        a.indexed
+        .every(((int, dynamic) item) => _deepEquals(item.$2, b[item.$1]));
+  }
+  if (a is Map && b is Map) {
+    return a.length == b.length && a.entries.every((MapEntry<Object?, Object?> entry) =>
+        (b as Map<Object?, Object?>).containsKey(entry.key) &&
+        _deepEquals(entry.value, b[entry.key]));
+  }
+  return a == b;
+}
+
+
 enum CheckoutEnvironment {
   sandbox,
   production,
+}
+
+class CkoDesignToken {
+  CkoDesignToken({
+    this.colorTokens,
+    this.borderRadius,
+    this.borderFormRadius,
+    this.fonts,
+  });
+
+  CkoColorTokens? colorTokens;
+
+  CkoBorderRadiusToken? borderRadius;
+
+  CkoBorderRadiusToken? borderFormRadius;
+
+  Map<String?, CkoFont>? fonts;
+
+  List<Object?> _toList() {
+    return <Object?>[
+      colorTokens,
+      borderRadius,
+      borderFormRadius,
+      fonts,
+    ];
+  }
+
+  Object encode() {
+    return _toList();  }
+
+  static CkoDesignToken decode(Object result) {
+    result as List<Object?>;
+    return CkoDesignToken(
+      colorTokens: result[0] as CkoColorTokens?,
+      borderRadius: result[1] as CkoBorderRadiusToken?,
+      borderFormRadius: result[2] as CkoBorderRadiusToken?,
+      fonts: (result[3] as Map<Object?, Object?>?)?.cast<String?, CkoFont>(),
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! CkoDesignToken || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return _deepEquals(encode(), other.encode());
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList())
+;
+}
+
+class CkoColorTokens {
+  CkoColorTokens({
+    this.colorAction,
+    this.colorBackground,
+    this.colorBorder,
+    this.colorDisabled,
+    this.colorPrimary,
+    this.colorFormBackground,
+    this.colorFormBorder,
+    this.colorInverse,
+    this.colorOutline,
+    this.colorSecondary,
+    this.colorSuccess,
+    this.colorError,
+    this.colorScrolledContainer,
+  });
+
+  int? colorAction;
+
+  int? colorBackground;
+
+  int? colorBorder;
+
+  int? colorDisabled;
+
+  int? colorPrimary;
+
+  int? colorFormBackground;
+
+  int? colorFormBorder;
+
+  int? colorInverse;
+
+  int? colorOutline;
+
+  int? colorSecondary;
+
+  int? colorSuccess;
+
+  int? colorError;
+
+  int? colorScrolledContainer;
+
+  List<Object?> _toList() {
+    return <Object?>[
+      colorAction,
+      colorBackground,
+      colorBorder,
+      colorDisabled,
+      colorPrimary,
+      colorFormBackground,
+      colorFormBorder,
+      colorInverse,
+      colorOutline,
+      colorSecondary,
+      colorSuccess,
+      colorError,
+      colorScrolledContainer,
+    ];
+  }
+
+  Object encode() {
+    return _toList();  }
+
+  static CkoColorTokens decode(Object result) {
+    result as List<Object?>;
+    return CkoColorTokens(
+      colorAction: result[0] as int?,
+      colorBackground: result[1] as int?,
+      colorBorder: result[2] as int?,
+      colorDisabled: result[3] as int?,
+      colorPrimary: result[4] as int?,
+      colorFormBackground: result[5] as int?,
+      colorFormBorder: result[6] as int?,
+      colorInverse: result[7] as int?,
+      colorOutline: result[8] as int?,
+      colorSecondary: result[9] as int?,
+      colorSuccess: result[10] as int?,
+      colorError: result[11] as int?,
+      colorScrolledContainer: result[12] as int?,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! CkoColorTokens || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return _deepEquals(encode(), other.encode());
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList())
+;
+}
+
+class CkoBorderRadiusToken {
+  CkoBorderRadiusToken({
+    this.all,
+  });
+
+  int? all;
+
+  List<Object?> _toList() {
+    return <Object?>[
+      all,
+    ];
+  }
+
+  Object encode() {
+    return _toList();  }
+
+  static CkoBorderRadiusToken decode(Object result) {
+    result as List<Object?>;
+    return CkoBorderRadiusToken(
+      all: result[0] as int?,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! CkoBorderRadiusToken || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return _deepEquals(encode(), other.encode());
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList())
+;
+}
+
+class CkoFont {
+  CkoFont({
+    this.fontStyle,
+    this.fontWeight,
+    this.fontFamily,
+    this.letterSpacing,
+    this.lineHeight,
+  });
+
+  String? fontStyle;
+
+  String? fontWeight;
+
+  String? fontFamily;
+
+  int? letterSpacing;
+
+  int? lineHeight;
+
+  List<Object?> _toList() {
+    return <Object?>[
+      fontStyle,
+      fontWeight,
+      fontFamily,
+      letterSpacing,
+      lineHeight,
+    ];
+  }
+
+  Object encode() {
+    return _toList();  }
+
+  static CkoFont decode(Object result) {
+    result as List<Object?>;
+    return CkoFont(
+      fontStyle: result[0] as String?,
+      fontWeight: result[1] as String?,
+      fontFamily: result[2] as String?,
+      letterSpacing: result[3] as int?,
+      lineHeight: result[4] as int?,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! CkoFont || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return _deepEquals(encode(), other.encode());
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList())
+;
+}
+
+class CheckoutInitParams {
+  CheckoutInitParams({
+    required this.sessionToken,
+    required this.sessionId,
+    required this.sessionSecret,
+    required this.publicKey,
+    this.environment,
+    this.designToken,
+  });
+
+  String sessionToken;
+
+  String sessionId;
+
+  String sessionSecret;
+
+  String publicKey;
+
+  CheckoutEnvironment? environment;
+
+  CkoDesignToken? designToken;
+
+  List<Object?> _toList() {
+    return <Object?>[
+      sessionToken,
+      sessionId,
+      sessionSecret,
+      publicKey,
+      environment,
+      designToken,
+    ];
+  }
+
+  Object encode() {
+    return _toList();  }
+
+  static CheckoutInitParams decode(Object result) {
+    result as List<Object?>;
+    return CheckoutInitParams(
+      sessionToken: result[0]! as String,
+      sessionId: result[1]! as String,
+      sessionSecret: result[2]! as String,
+      publicKey: result[3]! as String,
+      environment: result[4] as CheckoutEnvironment?,
+      designToken: result[5] as CkoDesignToken?,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! CheckoutInitParams || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return _deepEquals(encode(), other.encode());
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList())
+;
 }
 
 
@@ -31,6 +380,21 @@ class _PigeonCodec extends StandardMessageCodec {
     }    else if (value is CheckoutEnvironment) {
       buffer.putUint8(129);
       writeValue(buffer, value.index);
+    }    else if (value is CkoDesignToken) {
+      buffer.putUint8(130);
+      writeValue(buffer, value.encode());
+    }    else if (value is CkoColorTokens) {
+      buffer.putUint8(131);
+      writeValue(buffer, value.encode());
+    }    else if (value is CkoBorderRadiusToken) {
+      buffer.putUint8(132);
+      writeValue(buffer, value.encode());
+    }    else if (value is CkoFont) {
+      buffer.putUint8(133);
+      writeValue(buffer, value.encode());
+    }    else if (value is CheckoutInitParams) {
+      buffer.putUint8(134);
+      writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
     }
@@ -42,17 +406,27 @@ class _PigeonCodec extends StandardMessageCodec {
       case 129: 
         final int? value = readValue(buffer) as int?;
         return value == null ? null : CheckoutEnvironment.values[value];
+      case 130: 
+        return CkoDesignToken.decode(readValue(buffer)!);
+      case 131: 
+        return CkoColorTokens.decode(readValue(buffer)!);
+      case 132: 
+        return CkoBorderRadiusToken.decode(readValue(buffer)!);
+      case 133: 
+        return CkoFont.decode(readValue(buffer)!);
+      case 134: 
+        return CheckoutInitParams.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
     }
   }
 }
 
-class MoniepointCheckout {
-  /// Constructor for [MoniepointCheckout].  The [binaryMessenger] named argument is
+class MoniepointCheckoutPlugin {
+  /// Constructor for [MoniepointCheckoutPlugin].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  MoniepointCheckout({BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
+  MoniepointCheckoutPlugin({BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
       : pigeonVar_binaryMessenger = binaryMessenger,
         pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
@@ -61,14 +435,15 @@ class MoniepointCheckout {
 
   final String pigeonVar_messageChannelSuffix;
 
-  Future<void> initialize({required String publicKey, CheckoutEnvironment environment = CheckoutEnvironment.sandbox}) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.moniepoint_checkout.MoniepointCheckout.initialize$pigeonVar_messageChannelSuffix';
+  /// This is called by Flutter to start the checkout flow.
+  Future<void> startCheckout(CheckoutInitParams session) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.moniepoint_checkout.MoniepointCheckoutPlugin.startCheckout$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[publicKey, environment]);
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[session]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -83,32 +458,68 @@ class MoniepointCheckout {
       return;
     }
   }
+}
 
-  Future<String> tokenize() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.moniepoint_checkout.MoniepointCheckout.tokenize$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_sendFuture as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else if (pigeonVar_replyList[0] == null) {
-      throw PlatformException(
-        code: 'null-error',
-        message: 'Host platform returned null value for non-null return value.',
-      );
-    } else {
-      return (pigeonVar_replyList[0] as String?)!;
+abstract class CheckoutPlatformApi {
+  static const MessageCodec<Object?> pigeonChannelCodec = _PigeonCodec();
+
+  /// Called when checkout succeeds. Returns a string (e.g. token or result ID).
+  void onSuccess(String result);
+
+  /// Called when checkout fails. Includes the error message.
+  void onFailure(String error);
+
+  static void setUp(CheckoutPlatformApi? api, {BinaryMessenger? binaryMessenger, String messageChannelSuffix = '',}) {
+    messageChannelSuffix = messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.moniepoint_checkout.CheckoutPlatformApi.onSuccess$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        pigeonVar_channel.setMessageHandler(null);
+      } else {
+        pigeonVar_channel.setMessageHandler((Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.moniepoint_checkout.CheckoutPlatformApi.onSuccess was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final String? arg_result = (args[0] as String?);
+          assert(arg_result != null,
+              'Argument for dev.flutter.pigeon.moniepoint_checkout.CheckoutPlatformApi.onSuccess was null, expected non-null String.');
+          try {
+            api.onSuccess(arg_result!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
+    }
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.moniepoint_checkout.CheckoutPlatformApi.onFailure$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        pigeonVar_channel.setMessageHandler(null);
+      } else {
+        pigeonVar_channel.setMessageHandler((Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.moniepoint_checkout.CheckoutPlatformApi.onFailure was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final String? arg_error = (args[0] as String?);
+          assert(arg_error != null,
+              'Argument for dev.flutter.pigeon.moniepoint_checkout.CheckoutPlatformApi.onFailure was null, expected non-null String.');
+          try {
+            api.onFailure(arg_error!);
+            return wrapResponse(empty: true);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
     }
   }
 }

@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.moniepoint.moniepoint_checkout_sdk" >
+    package="com.moniepoint.moniepoint_checkout_sdk">
 
     <application>
         <activity
-            android:name=".CheckoutActivity"
-            android:exported="false"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:name=".CheckoutFlowActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

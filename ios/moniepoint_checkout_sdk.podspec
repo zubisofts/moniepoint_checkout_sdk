@@ -23,6 +23,7 @@ A new Flutter plugin project.
   
   s.dependency 'Frames', '~> 4'
   s.dependency 'PhoneNumberKit'
+  s.dependency 'CheckoutComponents'
 
   # If your plugin requires a privacy manifest, for example if it uses any
   # required reason APIs, update the PrivacyInfo.xcprivacy file to describe your

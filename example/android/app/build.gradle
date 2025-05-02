@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.moniepoint.moniepoint_checkout_sdk_example"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 35
     ndkVersion = ndkVersion "26.3.11579264"
 
     compileOptions {
